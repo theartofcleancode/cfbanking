@@ -7,12 +7,16 @@ class Bank:
         self.writer = cf.Writer('./accounts.txt')
         self.printer = cf.Writer('console')
 
+    def receive_client(self):
+        client =  self.reader.read('firstname'), \
+                self.reader.read('lastname'), \
+                self.reader.read('address'), \
+                self.reader.read('balance')
+        return client
+
     def create_account(self):
-        client =  self.reader.read('First Name'), \
-                self.reader.read('Last Name'), \
-                self.reader.read('Address'), \
-                self.reader.read('Balance')
-        request = api.TupleRequest(client)
+        client = self.receive_client()
+        request = api.TupleDictRequest(client)
 
         create_account = banking.CreateAccount()
         account = create_account.execute(request)
@@ -21,8 +25,23 @@ class Bank:
         self.writer.write(response.data)
         self.printer.write(response.data)
 
+    def make_transaction(self):
+        make_transaction = banking.MakeTransaction()
+        client =  self.receive_client()
+        balace = 0
+        request = api.TupleRequest(client)
+        # request = {
+        #     'account':{
+        #         'client': client_request
+        #     }
+        # }
+        transaction = make_transaction.execute(request)
+        response = api.TextResponse(transaction)
+        self.printer.write(response)
+
     def run(self):
         self.create_account()
+        # self.make_transaction()
 
 if __name__ == '__main__':
     Bank().run()
