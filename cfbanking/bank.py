@@ -16,7 +16,7 @@ class Bank:
 
     def create_account(self):
         client = self.receive_client()
-        request = api.TupleDictRequest(client)
+        request = api.TupleRequest(client)
 
         create_account = banking.CreateAccount()
         account = create_account.execute(request)
