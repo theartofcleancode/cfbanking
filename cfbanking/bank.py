@@ -10,13 +10,21 @@ class Bank:
     def receive_client(self):
         client =  self.reader.read('firstname'), \
                 self.reader.read('lastname'), \
-                self.reader.read('address'), \
-                self.reader.read('balance')
+                self.reader.read('address')
         return client
+        
+
+    def prepare_transaction(self):
+        client =  'client', self.receive_client()
+        code = self.reader.read('code')
+        amount = self.reader.read('amount')
+        action = self.reader.read('action')
+        return action, ('account', (client, code, amount))
 
     def create_account(self):
         client = self.receive_client()
-        request = api.TupleRequest(client)
+        balance = self.reader.read('balance')
+        request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
         account = create_account.execute(request)
@@ -27,14 +35,8 @@ class Bank:
 
     def make_transaction(self):
         make_transaction = banking.MakeTransaction()
-        client =  self.receive_client()
-        balace = 0
-        request = api.TupleRequest(client)
-        # request = {
-        #     'account':{
-        #         'client': client_request
-        #     }
-        # }
+        account = self.prepare_transaction()
+        request = api.TupleRequest(account)
         transaction = make_transaction.execute(request)
         response = api.TextResponse(transaction)
         self.printer.write(response)
