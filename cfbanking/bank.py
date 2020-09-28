@@ -41,13 +41,11 @@ class Bank:
         console_reader = cf.Reader('console')
         console_writer = cf.Writer('console')
         code = console_reader.read('code')
-        # print(f"code type {type(code[1])} {code[1]}")
 
         # search the corresponding account into the database
         with open('./accounts.txt') as f:
             text = f.readlines()
         accounts = api.TextRequest(text).data
-        # print(f"accounts: {accounts}")
         for i, account in enumerate(accounts):
             if account['code'] == str(code[1]): # found account
                 action = console_reader.read('action')
@@ -58,18 +56,12 @@ class Bank:
                 # update account balance
                 account['balance'] = transaction['new_balance']
                 accounts[i] = account
-                transaction_response = api.TextResponse(accounts)
                 # save to database
+                transaction_response = api.TextResponse(accounts)
                 file_writer = cf.Writer('./accounts.txt')
-                file_writer.write(transaction_response.data)
+                file_writer.write(transaction_response.data, mode='w+')
         else:
-            console_writer.write('Account not found')
-        
-        # account = self.prepare_transaction()
-        # request = api.TupleRequest(account)
-        # transaction = make_transaction.execute(request)
-        # response = api.TextResponse(transaction)
-        # self.printer.write(response.data)
+            console_writer.write('Account not found', 'w+')
 
     def run(self):
         # self.create_account()
