@@ -19,7 +19,8 @@ class Bank:
         code = self.reader.read('code')
         amount = self.reader.read('amount')
         action = self.reader.read('action')
-        return action, ('account', (client, code, amount))
+        balance = self.reader.read('balance')
+        return action, ('account', (client, code, balance)), amount
 
     def create_account(self):
         client = self.receive_client()
@@ -39,11 +40,11 @@ class Bank:
         request = api.TupleRequest(account)
         transaction = make_transaction.execute(request)
         response = api.TextResponse(transaction)
-        self.printer.write(response)
+        self.printer.write(response.data)
 
     def run(self):
-        self.create_account()
-        # self.make_transaction()
+        # self.create_account()
+        self.make_transaction()
 
 if __name__ == '__main__':
     Bank().run()
