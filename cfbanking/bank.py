@@ -28,13 +28,21 @@ class Bank:
         request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
-        account = create_account.execute(request)
+        account = create_account.execute(request.data)
 
-        response = api.TextResponse([account])
+        response = api.TextResponse(account)
         self.writer.write(response.data)
         self.printer.write(response.data)
 
     def make_transaction(self):
+        # get code from client
+        console_reader = cf.Reader('console')
+        code = console_reader.read('code')
+
+        # search the corresponding account into the database
+        with open('./accounts.txt') as f:
+            text = f.readlines()
+        text_request = api.TextRequest(text)
         make_transaction = banking.MakeTransaction()
         account = self.prepare_transaction()
         request = api.TupleRequest(account)
