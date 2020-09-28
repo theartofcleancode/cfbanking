@@ -35,20 +35,41 @@ class Bank:
         self.printer.write(response.data)
 
     def make_transaction(self):
+        make_transaction = banking.MakeTransaction()
+
         # get code from client
         console_reader = cf.Reader('console')
+        console_writer = cf.Writer('console')
         code = console_reader.read('code')
+        # print(f"code type {type(code[1])} {code[1]}")
 
         # search the corresponding account into the database
         with open('./accounts.txt') as f:
             text = f.readlines()
-        text_request = api.TextRequest(text)
-        make_transaction = banking.MakeTransaction()
-        account = self.prepare_transaction()
-        request = api.TupleRequest(account)
-        transaction = make_transaction.execute(request)
-        response = api.TextResponse(transaction)
-        self.printer.write(response.data)
+        accounts = api.TextRequest(text).data
+        # print(f"accounts: {accounts}")
+        for i, account in enumerate(accounts):
+            if account['code'] == str(code[1]): # found account
+                action = console_reader.read('action')
+                amount = console_reader.read('amount')
+                data = action, amount, ('account', account)
+                client_request = api.TupleRequest(data)
+                transaction = make_transaction.execute(client_request.data)
+                # update account balance
+                account['balance'] = transaction['new_balance']
+                accounts[i] = account
+                transaction_response = api.TextResponse(accounts)
+                # save to database
+                file_writer = cf.Writer('./accounts.txt')
+                file_writer.write(transaction_response.data)
+        else:
+            console_writer.write('Account not found')
+        
+        # account = self.prepare_transaction()
+        # request = api.TupleRequest(account)
+        # transaction = make_transaction.execute(request)
+        # response = api.TextResponse(transaction)
+        # self.printer.write(response.data)
 
     def run(self):
         # self.create_account()
