@@ -61,9 +61,9 @@ class Bank:
                 transaction_response = api.TextResponse(accounts)
                 # save to database
                 file_writer = cf.Writer('./accounts.txt')
-                file_writer.write(transaction_response.data)
+                file_writer.write(transaction_response.data, mode='w+')
         else:
-            console_writer.write('Account not found')
+            console_writer.write('Account not found', 'w+')
         
         # account = self.prepare_transaction()
         # request = api.TupleRequest(account)
