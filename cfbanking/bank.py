@@ -53,7 +53,7 @@ class Bank:
         accounts = api.TextRequest(accounts).data
         for i, account in enumerate(accounts):
             if account['code'] == str(code[1]): # found account
-                action = self.client.read('action')
+                action = self.client.read_action()
                 amount = self.client.read_int('amount')
                 data = action, amount, ('account', account)
                 client_request = api.TupleRequest(data)
