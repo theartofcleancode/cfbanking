@@ -1,0 +1,14 @@
+CODE: 4074
+BALANCE: 350.0
+CLIENT:
+    ADDRESS: Plateau
+    LASTNAME: Diallo
+    FIRSTNAME: Samba
+
+CODE: 26
+BALANCE: 740.0
+CLIENT:
+    ADDRESS: Fann
+    LASTNAME: Sow
+    FIRSTNAME: Sira
+

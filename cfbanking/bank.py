@@ -2,37 +2,38 @@ import banking
 import pythonapi as api
 import consolefile as cf
 class Bank:
-    def __init__(self):
-        self.reader = cf.Reader('console')
-        self.writer = cf.Writer('./accounts.txt')
-        self.printer = cf.Writer('console')
 
     def receive_client(self):
-        client =  self.reader.read('firstname'), \
-                self.reader.read('lastname'), \
-                self.reader.read('address')
-        return client
-        
-
-    def prepare_transaction(self):
-        client =  'client', self.receive_client()
-        code = self.reader.read('code')
-        amount = self.reader.read('amount')
-        action = self.reader.read('action')
-        balance = self.reader.read('balance')
-        return action, ('account', (client, code, balance)), amount
+        firstname = input('Enter your first name: ')
+        lastname = input('Enter your last name: ')
+        address = input('Enter your address: ')
+        return ('firstname', firstname), ('lastname', lastname), ('address', address)
 
     def create_account(self):
         client = self.receive_client()
-        balance = self.reader.read('balance')
+        balance = ('balance', input('Enter your balance: '))
         request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
         account = create_account.execute(request.data)
 
         response = api.TextResponse(account)
-        self.writer.write(response.data)
-        self.printer.write(response.data)
+        with open('./accounts.txt', 'a+') as f:
+            f.write(response.data)
+        print(response.data)
+
+    def delete_account(self):
+        code = input('Enter your code: ')
+        with open('./accounts.txt', 'r') as f:
+            text = f.readlines()
+        accounts = api.TextRequest(text).data
+        for i, account in enumerate(accounts):
+            if account['code'] == code:
+                del accounts[i]
+        new_accounts = api.TextResponse(accounts).data
+        # print(new_accounts)
+        with open('./accounts.txt', 'w') as f:
+            f.write(new_accounts)
 
     def make_transaction(self):
         make_transaction = banking.MakeTransaction()
@@ -58,14 +59,15 @@ class Bank:
                 accounts[i] = account
                 # save to database
                 transaction_response = api.TextResponse(accounts)
-                file_writer = cf.Writer('./accounts.txt')
-                file_writer.write(transaction_response.data, mode='w+')
+                with open('./accounts.txt', 'w+') as f:
+                    f.write(transaction_response.data)
         else:
-            console_writer.write('Account not found', 'w+')
+            print('Account not found')
 
     def run(self):
         # self.create_account()
-        self.make_transaction()
+        # self.make_transaction()
+        self.delete_account()
 
 if __name__ == '__main__':
     Bank().run()
