@@ -9,3 +9,6 @@ class Client(Console):
 
     def read_balance(self):
         return super().read_float('balance')
+
+    def read_code(self):
+        return super().read_int('code')

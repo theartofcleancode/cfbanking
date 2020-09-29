@@ -19,17 +19,16 @@ class Bank:
         self.accounts.add(response.data)
 
     def delete_account(self):
-        code = input('Enter your code: ')
-        with open('./accounts.txt', 'r') as f:
-            text = f.readlines()
-        accounts = api.TextRequest(text).data
+        code = self.client.read_code()
+        accounts = self.accounts.read()
+        accounts = api.TextRequest(accounts).data
         for i, account in enumerate(accounts):
-            if account['code'] == code:
+            if account['code'] == str(code[1]):
+                print('ACCOUNT DELETED:\n')
+                print(api.TextResponse(account).data)
                 del accounts[i]
         new_accounts = api.TextResponse(accounts).data
-        # print(new_accounts)
-        with open('./accounts.txt', 'w') as f:
-            f.write(new_accounts)
+        self.accounts.write(new_accounts)
 
     def make_transaction(self):
         make_transaction = banking.MakeTransaction()
@@ -61,9 +60,9 @@ class Bank:
             print('Account not found')
 
     def run(self):
-        self.create_account()
+        # self.create_account()
         # self.make_transaction()
-        # self.delete_account()
+        self.delete_account()
 
 if __name__ == '__main__':
     Bank().run()
