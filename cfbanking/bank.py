@@ -44,27 +44,34 @@ class Bank:
 
     def make_transaction(self):
         make_transaction = banking.MakeTransaction()
-        account = self.find_account()
-        action = self.client.read('action')
-        amount = self.client.read_int('amount')
-        data = action, amount, ('account', account)
-        client_request = api.TupleRequest(data)
-        transaction = make_transaction.execute(client_request.data)
-        # update account balance
-        account['balance'] = transaction['new_balance']
-        accounts[i] = account
-        # save to database
+
+        # get code from client
+        code = self.client.read_code()
+
+        # search the corresponding account into the database
+        accounts = self.accounts.read()
+        accounts = api.TextRequest(accounts).data
+        for i, account in enumerate(accounts):
+            if account['code'] == str(code[1]): # found account
+                action = self.client.read('action')
+                amount = self.client.read_int('amount')
+                data = action, amount, ('account', account)
+                client_request = api.TupleRequest(data)
+                transaction = make_transaction.execute(client_request.data)
+                # update account balance
+                account['balance'] = transaction['new_balance']
+                accounts[i] = account
+                # save to database
         transaction_response = api.TextResponse(accounts)
         self.accounts.write(transaction_response.data)
-        # with open('./accounts.txt', 'w+') as f:
-        #     f.write(transaction_response.data)
+
 
     def run(self):
         # self.create_account()
-        # self.make_transaction()
+        self.make_transaction()
         # self.delete_account()
-        i = self.find_account()
-        print(f"account code: {i}")
+        # i = self.find_account()
+        # print(f"account code: {i}")
 
 if __name__ == '__main__':
     Bank().run()
