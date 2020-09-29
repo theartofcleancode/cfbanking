@@ -13,5 +13,13 @@ class Client(Console):
     def read_code(self):
         return super().read_int('code')
 
+    def read_action(self):
+        var, val = super().read('action', info=' (deposit / d / withdraw / w) ')
+        if val not in ['deposit', 'withdraw', 'd', 'w']:
+            return self.read_action()
+        else:
+            return var, val
+
+
     def show(self, data):
         super().write(data)
