@@ -7,8 +7,8 @@ class Bank:
         self.accounts = Account('./accounts.txt')
     
     def create_account(self):
-        client = self.client.read()
-        balance = self.client.read_balance()
+        client = self.client.read_client()
+        balance = self.client.read_float('balance')
         request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
@@ -34,18 +34,15 @@ class Bank:
         make_transaction = banking.MakeTransaction()
 
         # get code from client
-        console_reader = cf.Reader('console')
-        console_writer = cf.Writer('console')
-        code = console_reader.read('code')
+        code = self.client.read_code()
 
         # search the corresponding account into the database
-        with open('./accounts.txt') as f:
-            text = f.readlines()
-        accounts = api.TextRequest(text).data
+        accounts = self.accounts.read()
+        accounts = api.TextRequest(accounts).data
         for i, account in enumerate(accounts):
             if account['code'] == str(code[1]): # found account
-                action = console_reader.read('action')
-                amount = console_reader.read('amount')
+                action = self.client.read('action')
+                amount = self.client.read_int('amount')
                 data = action, amount, ('account', account)
                 client_request = api.TupleRequest(data)
                 transaction = make_transaction.execute(client_request.data)
@@ -53,16 +50,15 @@ class Bank:
                 account['balance'] = transaction['new_balance']
                 accounts[i] = account
                 # save to database
-                transaction_response = api.TextResponse(accounts)
-                with open('./accounts.txt', 'w+') as f:
-                    f.write(transaction_response.data)
-        else:
-            print('Account not found')
+        transaction_response = api.TextResponse(accounts)
+        self.accounts.write(transaction_response.data)
+                # with open('./accounts.txt', 'w+') as f:
+                #     f.write(transaction_response.data)
 
     def run(self):
         # self.create_account()
-        # self.make_transaction()
-        self.delete_account()
+        self.make_transaction()
+        # self.delete_account()
 
 if __name__ == '__main__':
     Bank().run()
