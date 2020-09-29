@@ -1,26 +1,22 @@
 import banking
 import pythonapi as api
-import consolefile as cf
-from cfbanking.domain import Client
+from cfbanking.domain import Client, Account
 class Bank:
     def __init__(self):
-        self.console = cf.domain.Console()
-        self.file = cf.domain.File()
-        self.console_client = Client(self.console)
-        self.file_client = Client(self.file)
+        self.client = Client()
+        self.accounts = Account('./accounts.txt')
     
     def create_account(self):
-        client = self.console_client.read()
-        balance = self.console.read('balance')
+        client = self.client.read()
+        balance = self.client.read_balance()
         request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
         account = create_account.execute(request.data)
 
         response = api.TextResponse(account)
-        with open('./accounts.txt', 'a+') as f:
-            f.write(response.data)
         print(response.data)
+        self.accounts.add(response.data)
 
     def delete_account(self):
         code = input('Enter your code: ')
