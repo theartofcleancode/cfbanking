@@ -1,9 +1,11 @@
-class Client:
-    def __init__(self, endpoint):
-        self.endpoint = endpoint
+from consolefile.domain import Console
 
+class Client(Console):
     def read(self):
-        firstname = self.endpoint.read('firstname')
-        lastname = self.endpoint.read('lastname')
-        address = self.endpoint.read('address')
+        firstname = super().read('firstname')
+        lastname = super().read('lastname')
+        address = super().read('address')
         return firstname, lastname, address
+
+    def read_balance(self):
+        return super().read_float('balance')
