@@ -1,17 +1,17 @@
 import banking
 import pythonapi as api
 import consolefile as cf
+from cfbanking.domain import Client
 class Bank:
-
-    def receive_client(self):
-        firstname = input('Enter your first name: ')
-        lastname = input('Enter your last name: ')
-        address = input('Enter your address: ')
-        return ('firstname', firstname), ('lastname', lastname), ('address', address)
-
+    def __init__(self):
+        self.console = cf.domain.Console()
+        self.file = cf.domain.File()
+        self.console_client = Client(self.console)
+        self.file_client = Client(self.file)
+    
     def create_account(self):
-        client = self.receive_client()
-        balance = ('balance', input('Enter your balance: '))
+        client = self.console_client.read()
+        balance = self.console.read('balance')
         request = api.TupleRequest(client+(balance,))
 
         create_account = banking.CreateAccount()
@@ -65,9 +65,9 @@ class Bank:
             print('Account not found')
 
     def run(self):
-        # self.create_account()
+        self.create_account()
         # self.make_transaction()
-        self.delete_account()
+        # self.delete_account()
 
 if __name__ == '__main__':
     Bank().run()
