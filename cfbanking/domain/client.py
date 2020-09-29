@@ -1,7 +1,7 @@
 from consolefile.domain import Console
 
 class Client(Console):
-    def read(self):
+    def read_client(self):
         firstname = super().read('firstname')
         lastname = super().read('lastname')
         address = super().read('address')
@@ -12,3 +12,6 @@ class Client(Console):
 
     def read_code(self):
         return super().read_int('code')
+
+    def show(self, data):
+        super().write(data)
