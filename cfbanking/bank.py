@@ -57,7 +57,11 @@ class Bank:
                 amount = self.client.read_int('amount')
                 data = action, amount, ('account', account)
                 client_request = api.TupleRequest(data)
-                transaction = make_transaction.execute(client_request.data)
+                try:
+                    transaction = make_transaction.execute(client_request.data)
+                except Exception as e:
+                    self.client.show(f"\n{e}")
+                    return
                 # update account balance
                 account['balance'] = transaction['new_balance']
                 accounts[i] = account
@@ -67,11 +71,37 @@ class Bank:
 
 
     def run(self):
-        # self.create_account()
-        self.make_transaction()
-        # self.delete_account()
-        # i = self.find_account()
-        # print(f"account code: {i}")
+        option = input("""
+Choose an option between the following:
+0. QUIT the Bank now !
+1. CREATE a new account
+2. FIND an existing account
+3. DELETE an existing account
+4. Make a TRANSACTION (deposit or withdraw)
+""")
+        try:
+            option = int(option)
+        except Exception:
+            print('\nInput should be number!')
+            self.run()
+        if option == 0:
+            return
+        elif option == 1:
+            self.create_account()
+            self.run()
+        elif option == 2:
+            self.find_account()
+            self.run()
+        elif option == 3:
+            self.delete_account()
+            self.run()
+        elif option == 4:
+            self.make_transaction()
+            self.run()
+        else:
+            print(f"\nOption {option} is not supported by our bank")
+            self.run()
 
 if __name__ == '__main__':
+    print("\n---------------Welcome To our Bank---------------")
     Bank().run()
