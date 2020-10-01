@@ -33,3 +33,7 @@ Open your command line interface and run:
 ```
 clean-bank
 ```
+
+Results are saved into a file named `accounts.txt` in the local directory where you're running the command. Open it at the same time you are performing your actions.
+
+N.B. You need to create a new account first. For that: chose option 1 before anything; this operation will create the `accounts.txt` database for the first time. Then you will be able to perform the other actions too.
