@@ -25,3 +25,11 @@ pip install git+https://github.com/theartofcleancode/consolefile.git#egg=console
 ```
 pip install git+https://github.com/theartofcleancode/cfbanking.git#egg=cfbanking-1.0.0
 ```
+
+### **USAGE:**
+
+Open your command line interface and run:
+
+```
+clean-bank
+```
