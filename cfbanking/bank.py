@@ -53,6 +53,8 @@ class Bank:
         accounts = api.TextRequest(accounts).data
         for i, account in enumerate(accounts):
             if account['code'] == str(code[1]): # found account
+                print("\nThe corresponding account is:")
+                print(api.TextResponse(account).data)
                 action = self.client.read_action()
                 amount = self.client.read_int('amount')
                 data = action, amount, ('account', account)
@@ -63,6 +65,8 @@ class Bank:
                     self.client.show(f"\n{e}")
                     return
                 # update account balance
+                print("\nTransaction completed:")
+                print(api.TextResponse(transaction).data)
                 account['balance'] = transaction['new_balance']
                 accounts[i] = account
                 # save to database
