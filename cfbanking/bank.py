@@ -106,6 +106,9 @@ Choose an option between the following:
             print(f"\nOption {option} is not supported by our bank")
             self.run()
 
-if __name__ == '__main__':
-    print("\n---------------Welcome To our Bank---------------")
+def main():
+    print("\n---------------Welcome To the clean Bank---------------")
     Bank().run()
+
+if __name__ == '__main__':
+    main()
