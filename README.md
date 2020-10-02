@@ -3,7 +3,21 @@ Console File Banking: Banking using the console as user i/o interface and a text
 
 ### **INSTALLATION:**
 
-***Dependences:***
+***Create a virtual env:***
+
+```
+python3 -m venv bank
+```
+
+Activate the virtual environment
+
+```
+source bank/bin/activate
+```
+
+***Install dependencies:***
+
+After virtual env has been activated, install the following dependencies
 
 - ***banking***
 ```shell
