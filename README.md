@@ -11,9 +11,47 @@ python3 -m venv bank
 
 Activate the virtual environment
 
-```
-source bank/bin/activate
-```
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 24%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Shell</p></th>
+<th class="head"><p>Command to activate virtual environment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>POSIX</p></td>
+<td><p>bash/zsh</p></td>
+<td><p>$ source bank/bin/activate</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>fish</p></td>
+<td><p>$ . bank/bin/activate.fish</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td><p>csh/tcsh</p></td>
+<td><p>$ source bank/bin/activate.csh</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>PowerShell Core</p></td>
+<td><p>$ bank/bin/Activate.ps1</p></td>
+</tr>
+<tr class="row-even"><td><p>Windows</p></td>
+<td><p>cmd.exe</p></td>
+<td><p>C:\&gt; bank\Scripts\activate.bat</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td><p>PowerShell</p></td>
+<td><p>PS C:\&gt; bank\Scripts\Activate.ps1</p></td>
+</tr>
+</tbody>
+</table>
+
+
 
 ***Install dependencies:***
 
@@ -21,23 +59,23 @@ After virtual env has been activated, install the following dependencies
 
 - ***banking***
 ```shell
-pip install git+https://github.com/theartofcleancode/banking.git@python#egg=banking-1.0.0
+pip install git+https://github.com/theartofcleancode/banking.git@python#egg=banking
 ```
 
 - ***pythonapi***
 ```
-pip install git+https://github.com/theartofcleancode/pythonapi.git#egg=pythonapi-1.0.0
+pip install git+https://github.com/theartofcleancode/pythonapi.git#egg=pythonapi
 ```
 
 - ***consolefile***
 ```
-pip install git+https://github.com/theartofcleancode/consolefile.git#egg=consolefile-1.0.0
+pip install git+https://github.com/theartofcleancode/consolefile.git#egg=consolefile
 ```
 
 
 ***Main package:***
 ```
-pip install git+https://github.com/theartofcleancode/cfbanking.git#egg=cfbanking-1.0.0
+pip install git+https://github.com/theartofcleancode/cfbanking.git#egg=cfbanking
 ```
 
 ### **USAGE:**
